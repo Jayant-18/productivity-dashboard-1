@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Personal Productivity Dashboard</title>
+    <meta name="description" content="A modern, glassmorphism productivity dashboard featuring tasks, workout routines, timetables, habits, and sticky notes.">
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/906/906334.png">
+</head>
+<body>
+    <!-- Ambient Background Blobs -->
+    <div class="glass-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h2>AURA<span>.</span></h2>
+                <button class="mobile-close-btn" id="mobileCloseBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="todo">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>To-Do List</span>
+                </button>
+                <button class="nav-item" data-tab="workout">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <span>Workout</span>
+                </button>
+                <button class="nav-item" data-tab="timetable">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span>Timetable</span>
+                </button>
+                <button class="nav-item" data-tab="progress">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Progress</span>
+                </button>
+                <button class="nav-item" data-tab="notes">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    <span>Notes</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card glass-card">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="name">Productivity Pro</span>
+                        <span class="status"><i class="fa-solid fa-circle"></i> Active</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Header Bar -->
+            <header class="top-header glass-card">
+                <div class="header-left">
+                    <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </button>
+                    <div class="header-title">
+                        <h1 id="pageTitle">Dashboard Overview</h1>
+                        <p class="subtitle">Welcome back! Here's your daily summary.</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="datetime-display glass-card">
+                        <div class="time-box">
+                            <i class="fa-regular fa-clock"></i>
+                            <span id="liveTime">00:00:00 AM</span>
+                        </div>
+                        <div class="date-box">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span id="liveDate">Mon, Jan 01, 2026</span>
+                        </div>
+                    </div>
+
+                    <button class="theme-toggle-btn glass-card" id="themeToggleBtn" aria-label="Toggle Dark/Light Mode">
+                        <i class="fa-solid fa-moon" id="themeIcon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content Container -->
+            <main class="main-content">
+
+                <!-- SECTION 1: DASHBOARD OVERVIEW -->
+                <section class="tab-content active" id="dashboardSection">
+                    <!-- Quote Banner -->
+                    <div class="quote-card glass-card">
+                        <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                        <div class="quote-body">
+                            <p id="quoteText">"The secret of getting ahead is getting started."</p>
+                            <span id="quoteAuthor">- Mark Twain</span>
+                        </div>
+                        <button class="quote-refresh-btn" id="newQuoteBtn" title="New Quote">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Metrics Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-card glass-card">
+                            <div class="metric-icon purple"><i class="fa-solid fa-tasks"></i></div>
+                            <div class="metric-info">
+                                <h3>Total Tasks</h3>
+                                <span class="metric-value" id="dashTotalTasks">0</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="metric-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="metric-info">
+                                <h3>Completed</h3>
+                                <span class="metric-value" id="dashCompletedTasks">0</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="metric-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="metric-info">
+                                <h3>Pending</h3>
+                                <span class="metric-value" id="dashPendingTasks">0</span>
+                            </div>
+                        </div>
+
+                        <div class="metric-card glass-card">
+                            <div class="metric-icon blue"><i class="fa-solid fa-fire"></i></div>
+                            <div class="metric-info">
+                                <h3>Productivity</h3>
+                                <span class="metric-value" id="dashProductivity">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Grid: Daily Goals & Quick Tasks -->
+                    <div class="dashboard-two-col">
+                        <!-- Daily Goals Widget -->
+                        <div class="widget-card glass-card">
+                            <div class="widget-header">
+                                <h2><i class="fa-solid fa-bullseye text-gradient"></i> Daily Goals</h2>
+                                <span class="badge" id="goalsStreakBadge">5 Active</span>
+                            </div>
+
+                            <!-- Water Tracker -->
+                            <div class="water-tracker glass-card">
+                                <div class="water-info">
+                                    <div class="water-title">
+                                        <i class="fa-solid fa-glass-water blue-text"></i>
+                                        <div>
+                                            <h4>Water Intake</h4>
+                                            <p><span id="waterCount">0</span> of 8 Glasses (2000 ml)</p>
+                                        </div>
+                                    </div>
+                                    <div class="water-controls">
+                                        <button id="waterMinusBtn" class="qty-btn"><i class="fa-solid fa-minus"></i></button>
+                                        <button id="waterPlusBtn" class="qty-btn"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="water-glasses" id="waterGlassesGrid">
+                                    <!-- 8 Glasses generated dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Habit Checkboxes -->
+                            <div class="habit-list">
+                                <label class="habit-item glass-card">
+                                    <input type="checkbox" id="habitReading" class="habit-checkbox">
+                                    <span class="custom-check"><i class="fa-solid fa-check"></i></span>
+                                    <div class="habit-details">
+                                        <span class="habit-name"><i class="fa-solid fa-book-open"></i> Reading (30 Mins)</span>
+                                    </div>
+                                </label>
+
+                                <label class="habit-item glass-card">
+                                    <input type="checkbox" id="habitCoding" class="habit-checkbox">
+                                    <span class="custom-check"><i class="fa-solid fa-check"></i></span>
+                                    <div class="habit-details">
+                                        <span class="habit-name"><i class="fa-solid fa-code"></i> Coding Practice</span>
+                                    </div>
+                                </label>
+
+                                <label class="habit-item glass-card">
+                                    <input type="checkbox" id="habitWorkout" class="habit-checkbox">
+                                    <span class="custom-check"><i class="fa-solid fa-check"></i></span>
+                                    <div class="habit-details">
+                                        <span class="habit-name"><i class="fa-solid fa-person-running"></i> Daily Workout</span>
+                                    </div>
+                                </label>
+
+                                <label class="habit-item glass-card">
+                                    <input type="checkbox" id="habitMeditation" class="habit-checkbox">
+                                    <span class="custom-check"><i class="fa-solid fa-check"></i></span>
+                                    <div class="habit-details">
+                                        <span class="habit-name"><i class="fa-solid fa-spa"></i> Meditation (15 Mins)</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Today's Workout Quick Card -->
+                        <div class="widget-card glass-card">
+                            <div class="widget-header">
+                                <h2><i class="fa-solid fa-dumbbell text-gradient"></i> Today's Workout</h2>
+                                <span class="badge day-badge" id="todayWorkoutDay">Monday</span>
+                            </div>
+                            <div class="today-workout-preview" id="todayWorkoutPreview">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: TO-DO LIST -->
+                <section class="tab-content" id="todoSection">
+                    <div class="todo-container glass-card">
+                        <!-- Task Header Controls -->
+                        <div class="todo-header">
+                            <div class="search-box glass-card">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="taskSearchInput" placeholder="Search tasks by title or tag...">
+                            </div>
+
+                            <div class="filter-tabs">
+                                <button class="filter-btn active" data-filter="all">All</button>
+                                <button class="filter-btn" data-filter="pending">Pending</button>
+                                <button class="filter-btn" data-filter="completed">Completed</button>
+                            </div>
+
+                            <button class="btn-primary" id="openAddTaskModalBtn">
+                                <i class="fa-solid fa-plus"></i> Add Task
+                            </button>
+                        </div>
+
+                        <!-- Task List -->
+                        <div class="task-list" id="taskListContainer">
+                            <!-- Dynamically generated tasks -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: WORKOUT ROUTINE -->
+                <section class="tab-content" id="workoutSection">
+                    <div class="workout-header glass-card">
+                        <div class="day-tabs" id="workoutDayTabs">
+                            <button class="day-tab active" data-day="Monday">Mon</button>
+                            <button class="day-tab" data-day="Tuesday">Tue</button>
+                            <button class="day-tab" data-day="Wednesday">Wed</button>
+                            <button class="day-tab" data-day="Thursday">Thu</button>
+                            <button class="day-tab" data-day="Friday">Fri</button>
+                            <button class="day-tab" data-day="Saturday">Sat</button>
+                            <button class="day-tab" data-day="Sunday">Sun</button>
+                        </div>
+                    </div>
+
+                    <div class="workout-banner glass-card">
+                        <div class="banner-info">
+                            <h2 id="activeRoutineTitle">Monday - Chest & Triceps</h2>
+                            <p id="activeRoutineSub">Target your upper body push muscles today.</p>
+                        </div>
+                        <div class="routine-progress-wrap">
+                            <div class="routine-progress-bar">
+                                <div class="routine-progress-fill" id="routineProgressFill" style="width: 0%;"></div>
+                            </div>
+                            <span id="routineProgressText">0% Completed</span>
+                        </div>
+                    </div>
+
+                    <!-- Exercises Cards Grid -->
+                    <div class="exercise-cards-grid" id="exerciseCardsGrid">
+                        <!-- Dynamic Exercise Cards -->
+                    </div>
+                </section>
+
+                <!-- SECTION 4: TIMETABLE -->
+                <section class="tab-content" id="timetableSection">
+                    <div class="timetable-container glass-card">
+                        <div class="timetable-controls">
+                            <p class="table-tip"><i class="fa-solid fa-lightbulb"></i> Tip: Click on any cell to edit your activity schedule!</p>
+                            <button class="btn-secondary" id="clearTimetableBtn">
+                                <i class="fa-solid fa-trash-can"></i> Clear Timetable
+                            </button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="timetable-grid" id="timetableGrid">
+                                <thead>
+                                    <tr>
+                                        <th class="time-col">Time</th>
+                                        <th>Monday</th>
+                                        <th>Tuesday</th>
+                                        <th>Wednesday</th>
+                                        <th>Thursday</th>
+                                        <th>Friday</th>
+                                        <th>Saturday</th>
+                                        <th>Sunday</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="timetableBody">
+                                    <!-- Dynamic Timetable Rows (6 AM - 10 PM) -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: PROGRESS DASHBOARD -->
+                <section class="tab-content" id="progressSection">
+                    <div class="progress-grid">
+                        <!-- Circular Gauges -->
+                        <div class="gauge-card glass-card">
+                            <h3>Productivity Rate</h3>
+                            <div class="svg-gauge">
+                                <svg viewBox="0 0 160 160">
+                                    <circle class="bg" cx="80" cy="80" r="70"></circle>
+                                    <circle class="meter meter-prod" id="circleProd" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"></circle>
+                                </svg>
+                                <div class="gauge-value" id="valProd">0%</div>
+                            </div>
+                            <p class="gauge-label">Calculated from Tasks, Workouts & Goals</p>
+                        </div>
+
+                        <div class="gauge-card glass-card">
+                            <h3>Workout Completion</h3>
+                            <div class="svg-gauge">
+                                <svg viewBox="0 0 160 160">
+                                    <circle class="bg" cx="80" cy="80" r="70"></circle>
+                                    <circle class="meter meter-workout" id="circleWorkout" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"></circle>
+                                </svg>
+                                <div class="gauge-value" id="valWorkout">0%</div>
+                            </div>
+                            <p class="gauge-label">Weekly Exercise Cards Finished</p>
+                        </div>
+
+                        <div class="gauge-card glass-card">
+                            <h3>Tasks Completion</h3>
+                            <div class="svg-gauge">
+                                <svg viewBox="0 0 160 160">
+                                    <circle class="bg" cx="80" cy="80" r="70"></circle>
+                                    <circle class="meter meter-tasks" id="circleTasks" cx="80" cy="80" r="70" stroke-dasharray="440" stroke-dashoffset="440"></circle>
+                                </svg>
+                                <div class="gauge-value" id="valTasks">0%</div>
+                            </div>
+                            <p class="gauge-label">Ratio of Finished to Total Tasks</p>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Breakdown Card -->
+                    <div class="breakdown-card glass-card">
+                        <h2><i class="fa-solid fa-chart-bar text-gradient"></i> Activity Breakdown</h2>
+                        <div class="stat-rows">
+                            <div class="stat-row">
+                                <span><i class="fa-solid fa-list-check blue-text"></i> Total Tasks Created</span>
+                                <strong id="statTotalTasks">0</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fa-solid fa-check green-text"></i> Completed Tasks</span>
+                                <strong id="statCompletedTasks">0</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fa-solid fa-clock orange-text"></i> Pending Tasks</span>
+                                <strong id="statPendingTasks">0</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fa-solid fa-glass-water blue-text"></i> Water Goal Intake</span>
+                                <strong id="statWaterIntake">0 / 8 Glasses</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span><i class="fa-solid fa-dumbbell purple-text"></i> Workout Exercises Done</span>
+                                <strong id="statWorkoutExercises">0 Finished</strong>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: STICKY NOTES -->
+                <section class="tab-content" id="notesSection">
+                    <div class="notes-header glass-card">
+                        <h2><i class="fa-solid fa-note-sticky text-gradient"></i> Sticky Notes</h2>
+                        <button class="btn-primary" id="addNoteBtn">
+                            <i class="fa-solid fa-plus"></i> Add Note
+                        </button>
+                    </div>
+
+                    <div class="notes-grid" id="notesGrid">
+                        <!-- Dynamic Sticky Notes -->
+                    </div>
+                </section>
+
+                <!-- SECTION 7: SETTINGS -->
+                <section class="tab-content" id="settingsSection">
+                    <div class="settings-card glass-card">
+                        <h2><i class="fa-solid fa-sliders text-gradient"></i> Preferences & Data</h2>
+
+                        <div class="settings-group">
+                            <div class="setting-item">
+                                <div>
+                                    <h4>Dark Mode Theme</h4>
+                                    <p>Switch between glowing Dark mode and sleek Light mode.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="settingsThemeToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div>
+                                    <h4>Reset All Data</h4>
+                                    <p>Clear all tasks, timetable edits, workout checks, and sticky notes from Local Storage.</p>
+                                </div>
+                                <button class="btn-danger" id="resetDataBtn">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Reset Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer -->
+            <footer class="app-footer glass-card">
+                <div class="footer-content">
+                    <p class="footer-quote" id="footerQuote">"Consistency is what transforms average into excellence."</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                    <p class="copyright">&copy; 2026 AURA Productivity App. Built with Vanilla JS & Glassmorphic UI.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT TASK -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-card glass-card">
+            <div class="modal-header">
+                <h3 id="taskModalTitle">Add New Task</h3>
+                <button class="close-modal-btn" id="closeTaskModalBtn">&times;</button>
+            </div>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label for="taskTitleInput">Task Title</label>
+                    <input type="text" id="taskTitleInput" placeholder="e.g. Design wireframes for new project" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskDueDateInput">Due Date</label>
+                        <input type="date" id="taskDueDateInput" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriorityInput">Priority</label>
+                        <select id="taskPriorityInput">
+                            <option value="Low">Low Priority</option>
+                            <option value="Medium" selected>Medium Priority</option>
+                            <option value="High">High Priority</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="taskCategoryInput">Category</label>
+                    <select id="taskCategoryInput">
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Fitness">Fitness</option>
+                        <option value="Learning">Learning</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelTaskModalBtn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="saveTaskBtn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EXERCISE STOPWATCH TIMER -->
+    <div class="modal-overlay" id="timerModal">
+        <div class="modal-card glass-card timer-modal">
+            <div class="modal-header">
+                <h3 id="timerModalExercise">Workout Timer</h3>
+                <button class="close-modal-btn" id="closeTimerModalBtn">&times;</button>
+            </div>
+            <div class="timer-display-box">
+                <div class="timer-clock" id="stopwatchDisplay">00:00</div>
+                <div class="timer-controls">
+                    <button class="timer-btn play" id="timerStartBtn"><i class="fa-solid fa-play"></i> Start</button>
+                    <button class="timer-btn pause" id="timerPauseBtn"><i class="fa-solid fa-pause"></i> Pause</button>
+                    <button class="timer-btn reset" id="timerResetBtn"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
